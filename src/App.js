@@ -14,8 +14,10 @@ function App() {
     getPosts();
   }, []);
 
-  const handleAdd = () => {
-    console.log("Add");
+  const handleAdd = async () => {
+    const obj = { title: "a", body: "b" };
+    const { data: lastPostAdded } = await axios.post(postUrl, obj);
+    setPosts([lastPostAdded, ...posts]);
   };
 
   const handleUpdate = (post) => {
