@@ -1,8 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
+import axios from "axios";
 
 function App() {
   const [posts, setPosts] = useState([]);
+  const postUrl = "https://jsonplaceholder.typicode.com/posts";
+  const getPosts = async () => {
+    const { data } = await axios.get(postUrl);
+    setPosts(data);
+  };
+
+  useEffect(() => {
+    getPosts();
+  }, []);
+
   const handleAdd = () => {
     console.log("Add");
   };
