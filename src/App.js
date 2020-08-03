@@ -20,8 +20,12 @@ function App() {
     setPosts([lastPostAdded, ...posts]);
   };
 
-  const handleUpdate = (post) => {
-    console.log("Update", post);
+  const handleUpdate = async (post) => {
+    post.title = "title updated";
+    await axios.put(`${postUrl}/${post.id}`, post);
+    const index = posts.indexOf(post);
+    posts[index] = { ...post };
+    setPosts([...posts]);
   };
 
   const handleDelete = (post) => {
