@@ -29,8 +29,15 @@ function App() {
   };
 
   const handleDelete = async (post) => {
-    await axios.delete(`${postUrl}/${post.id}`);
-    setPosts((_) => posts.filter((_) => _.id !== post.id));
+    const originalPostsState = [...posts];
+    setPosts((prevPosts) => prevPosts.filter((_) => _.id !== post.id));
+    try {
+      await axios.delete(`${postUrl}/${post.id}`);
+      // throw new Error("");
+    } catch (error) {
+      alert("Something failed when deleting a post !");
+      setPosts([originalPostsState]);
+    }
   };
   return (
     <React.Fragment>
