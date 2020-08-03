@@ -28,8 +28,9 @@ function App() {
     setPosts([...posts]);
   };
 
-  const handleDelete = (post) => {
-    console.log("Delete", post);
+  const handleDelete = async (post) => {
+    await axios.delete(`${postUrl}/${post.id}`);
+    setPosts((_) => posts.filter((_) => _.id !== post.id));
   };
   return (
     <React.Fragment>
