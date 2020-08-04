@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import config from "./config.json";
 import httpModule from "./services/httpServices";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const [posts, setPosts] = useState([]);
@@ -35,7 +37,7 @@ function App() {
     const originalPostsState = [...posts];
     setPosts((prevPosts) => prevPosts.filter((_) => _.id !== post.id));
     try {
-      await httpModule.delete(`${config.apiEndpoint}/${post.id}`);
+      await httpModule.delete(`x${config.apiEndpoint}/${post.id}`);
       // throw new Error("");
     } catch (error) {
       if (error.response && error.response.status === 404) {
@@ -46,6 +48,7 @@ function App() {
   };
   return (
     <React.Fragment>
+      <ToastContainer />
       <button className="btn btn-primary" onClick={handleAdd}>
         Add
       </button>
