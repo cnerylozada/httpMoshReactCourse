@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
+import config from "./config.json";
 import httpModule from "./services/httpServices";
 
 function App() {
   const [posts, setPosts] = useState([]);
-  const postUrl = "https://jsonplaceholder.typicode.com/posts";
   const getPosts = async () => {
-    const { data } = await httpModule.get(postUrl);
+    const { data } = await httpModule.get(config.apiEndpoint);
     setPosts(data);
   };
 
@@ -16,13 +16,16 @@ function App() {
 
   const handleAdd = async () => {
     const obj = { title: "a", body: "b" };
-    const { data: lastPostAdded } = await httpModule.post(postUrl, obj);
+    const { data: lastPostAdded } = await httpModule.post(
+      config.apiEndpoint,
+      obj
+    );
     setPosts([lastPostAdded, ...posts]);
   };
 
   const handleUpdate = async (post) => {
     post.title = "title updated";
-    await httpModule.put(`${postUrl}/${post.id}`, post);
+    await httpModule.put(`${config.apiEndpoint}/${post.id}`, post);
     const index = posts.indexOf(post);
     posts[index] = { ...post };
     setPosts([...posts]);
@@ -32,7 +35,7 @@ function App() {
     const originalPostsState = [...posts];
     setPosts((prevPosts) => prevPosts.filter((_) => _.id !== post.id));
     try {
-      await httpModule.delete(`${postUrl}/${post.id}`);
+      await httpModule.delete(`${config.apiEndpoint}/${post.id}`);
       // throw new Error("");
     } catch (error) {
       if (error.response && error.response.status === 404) {
