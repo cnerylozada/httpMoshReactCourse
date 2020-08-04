@@ -2,6 +2,18 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import axios from "axios";
 
+axios.interceptors.response.use(null, (error) => {
+  const expectedError =
+    error.response &&
+    error.response.status >= 400 &&
+    error.response.status < 500;
+
+  if (!expectedError) {
+    console.log("A certain unexpected error: ", error);
+  }
+  return Promise.reject(error);
+});
+
 function App() {
   const [posts, setPosts] = useState([]);
   const postUrl = "https://jsonplaceholder.typicode.com/posts";
@@ -35,8 +47,10 @@ function App() {
       await axios.delete(`${postUrl}/${post.id}`);
       // throw new Error("");
     } catch (error) {
-      alert("Something failed when deleting a post !");
-      setPosts([originalPostsState]);
+      if (error.response && error.response.status === 404) {
+        console.log("A certain expected error ...");
+      }
+      setPosts([...originalPostsState]);
     }
   };
   return (
