@@ -8,6 +8,7 @@ axios.interceptors.response.use(null, (error) => {
     error.response.status < 500;
 
   if (!expectedError) {
+    console.log("Sentry Error Message!");
     toast.error("A certain unexpected error");
   }
   return Promise.reject(error);
@@ -16,6 +17,6 @@ axios.interceptors.response.use(null, (error) => {
 export default {
   get: axios.get,
   post: axios.post,
-  pust: axios.put,
+  put: axios.put,
   delete: axios.delete,
 };
